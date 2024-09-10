@@ -13,3 +13,6 @@ footer {
     background-color: #000; /* Couleur initiale du footer */
     transition: background-color 0.3s ease; /* Transition pour le changement de couleur */
 }
+#articl{
+    color: aqua;
+}
