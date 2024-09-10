@@ -1,0 +1,15 @@
+/* Définir la taille minimale du body */
+body {
+    min-height: 4096px;
+    margin: 0;
+}
+
+/* Style du footer */
+footer {
+    width: 100%;
+    position: fixed;
+    bottom: 0;
+    height: 50px; /* Vous pouvez ajuster la hauteur selon vos besoins */
+    background-color: #000; /* Couleur initiale du footer */
+    transition: background-color 0.3s ease; /* Transition pour le changement de couleur */
+}
