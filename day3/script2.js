@@ -1,11 +1,11 @@
 document.addEventListener('DOMContentLoaded', () => {
     const images = [
-        'assets/arc1.png',
-        'assets/arc2.png',
-        'assets/arc3.png',
-        'assets/arc4.png',
-        'assets/arc5.png',
-        'assets/arc6.png'
+        'images2/arc1.png',
+        'images2/arc2.png',
+        'images2/arc3.png',
+        'images2/arc4.png',
+        'images2/arc5.png',
+        'images2/arc6.png'
     ];
 
     const shuffledContainer = document.getElementById('shuffledContainer');
@@ -16,6 +16,7 @@ document.addEventListener('DOMContentLoaded', () => {
         const img = document.createElement('img');
         img.src = src;
         img.classList.add('color-block');
+        console.log(`Creating image element with src: ${src}`); // Debugging line
         return img;
     }
 
@@ -30,6 +31,7 @@ document.addEventListener('DOMContentLoaded', () => {
         images.forEach(src => {
             const img = createImageElement(src);
             shuffledContainer.appendChild(img);
+            console.log(`Appending image to container: ${src}`); // Debugging line
         });
     }
 

@@ -25,6 +25,6 @@
     <div id="orderedContainer" class="container"></div>
     <p id="message"></p>
 
-    <script src="script2.js"></script>
+    <script src="./script2.js"></script>
 </body>
 </html>
