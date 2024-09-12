@@ -3,27 +3,32 @@ session_start();
 include 'db_connection.php'; // Assurez-vous d'inclure votre fichier de connexion à la base de données
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
-    $nom = $_POST['nom'];
-    $prenom = $_POST['prenom'];
-    $email = $_POST['email'];
-    $password = password_hash($_POST['password'], PASSWORD_DEFAULT);
+    $nom = htmlspecialchars($_POST['nom']);
+    $prenom = htmlspecialchars($_POST['prenom']);
+    $email = htmlspecialchars($_POST['email']);
+    $password = $_POST['password'];
 
     // Vérifier si l'email existe déjà
-    $sql = "SELECT id FROM users WHERE email='$email'";
-    $result = $conn->query($sql);
+    $stmt = $conn->prepare("SELECT id FROM users WHERE email = ?");
+    $stmt->bind_param("s", $email);
+    $stmt->execute();
+    $result = $stmt->get_result();
 
     if ($result->num_rows > 0) {
         echo "Cet email est déjà utilisé.";
     } else {
-        $sql = "INSERT INTO users (nom, prenom, email, password) VALUES ('$nom', '$prenom', '$email', '$password')";
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $stmt = $conn->prepare("INSERT INTO users (nom, prenom, email, password) VALUES (?, ?, ?, ?)");
+        $stmt->bind_param("ssss", $nom, $prenom, $email, $hashed_password);
 
-        if ($conn->query($sql) === TRUE) {
+        if ($stmt->execute() === TRUE) {
             header("Location: connexion.php");
         } else {
-            echo "Erreur: " . $sql . "<br>" . $conn->error;
+            echo "Erreur: " . $stmt->error;
         }
     }
 
+    $stmt->close();
     $conn->close();
 }
 ?>
