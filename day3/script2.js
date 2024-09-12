@@ -9,54 +9,65 @@ document.addEventListener('DOMContentLoaded', () => {
     ];
 
     const shuffledContainer = document.getElementById('shuffledContainer');
-    const message = document.getElementById('message');
-    const shuffleButton = document.getElementById('shuffleButton');
 
-    function createImageElement(src) {
+    function createImageElement(src, index) {
         const img = document.createElement('img');
         img.src = src;
         img.classList.add('color-block');
-        console.log(`Creating image element with src: ${src}`); // Debugging line
+        img.draggable = true;
+        img.dataset.index = index; // Store the index
+        img.addEventListener('dragstart', handleDragStart);
+        img.addEventListener('dragover', handleDragOver);
+        img.addEventListener('drop', handleDrop);
         return img;
     }
 
-    function shuffleArray(array) {
-        for (let i = array.length - 1; i > 0; i--) {
-            const j = Math.floor(Math.random() * (i + 1));
-            [array[i], array[j]] = [array[j], array[i]];
-        }
-    }
-
     function initialize() {
-        images.forEach(src => {
-            const img = createImageElement(src);
+        images.forEach((src, index) => {
+            const img = createImageElement(src, index);
             shuffledContainer.appendChild(img);
-            console.log(`Appending image to container: ${src}`); // Debugging line
         });
     }
 
-    function shuffleImages() {
-        shuffledContainer.innerHTML = '';
-        const shuffledImages = [...images];
-        shuffleArray(shuffledImages);
-        shuffledImages.forEach(src => {
-            const img = createImageElement(src);
-            shuffledContainer.appendChild(img);
-        });
-        checkOrder(shuffledImages);
+    function handleDragStart(event) {
+        console.log('Drag start:', event.target.dataset.index);
+        event.dataTransfer.setData('text/plain', event.target.dataset.index);
     }
 
-    function checkOrder(shuffledImages) {
-        if (shuffledImages.join() === images.join()) {
-            message.textContent = 'Vous avez gagné';
-            message.style.color = 'green';
-        } else {
-            message.textContent = 'Vous avez perdu';
-            message.style.color = 'red';
+    function handleDragOver(event) {
+        event.preventDefault();
+    }
+
+    function handleDrop(event) {
+        event.preventDefault();
+        const draggedIndex = event.dataTransfer.getData('text/plain');
+        const targetIndex = event.target.dataset.index;
+        console.log('Drop:', { draggedIndex, targetIndex });
+
+        if (draggedIndex !== targetIndex) {
+            swapImages(draggedIndex, targetIndex);
         }
     }
 
-    shuffleButton.addEventListener('click', shuffleImages);
+    function swapImages(draggedIndex, targetIndex) {
+        const draggedImg = shuffledContainer.querySelector(`[data-index='${draggedIndex}']`);
+        const targetImg = shuffledContainer.querySelector(`[data-index='${targetIndex}']`);
+
+        if (draggedImg && targetImg) {
+            // Swap the images in the DOM
+            const draggedSrc = draggedImg.src;
+            draggedImg.src = targetImg.src;
+            targetImg.src = draggedSrc;
+
+            // Swap the data-index attributes
+            draggedImg.dataset.index = targetIndex;
+            targetImg.dataset.index = draggedIndex;
+
+            console.log('Swapped:', { draggedIndex, targetIndex });
+        } else {
+            console.error('Image elements not found for indices:', { draggedIndex, targetIndex });
+        }
+    }
 
     initialize();
 });
