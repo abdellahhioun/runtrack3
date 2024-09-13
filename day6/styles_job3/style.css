@@ -1,0 +1,32 @@
+/* Style par défaut pour les sections */
+.section {
+    background-color: #88c1d0;
+    padding: 20px;
+    margin: 10px;
+    border-radius: 8px;
+    text-align: center;
+    font-family: Arial, sans-serif;
+    color: #fff;
+}
+
+/* Style pour les résolutions entre 1680px et 1920px */
+@media screen and (min-width: 1680px) and (max-width: 1920px) {
+    .section {
+        background-color: #ffca4b;
+    }
+}
+
+/* Style pour les résolutions entre 1280px et 1680px */
+@media screen and (min-width: 1280px) and (max-width: 1679px) {
+    .section {
+        background-color: #275fa0;
+    }
+}
+
+/* Style pour les résolutions inférieures à 1280px */
+@media screen and (max-width: 1279px) {
+    .section {
+        background-color: #ffffff;
+        color: #000; /* Changer la couleur du texte pour une meilleure lisibilité */
+    }
+}
